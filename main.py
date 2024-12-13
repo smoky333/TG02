@@ -12,11 +12,10 @@ from config import TOKEN
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Конфигурация (рекомендуется использовать переменные окружения)
 
 IMG_FOLDER = 'img'
 
-# Убедитесь, что папка img существует
+
 os.makedirs(IMG_FOLDER, exist_ok=True)
 
 # Инициализация бота и диспетчера
@@ -26,7 +25,6 @@ dp = Dispatcher()
 
 @dp.message(CommandStart())
 async def cmd_start(message: types.Message):
-    """Обработчик команды /start"""
     await message.answer(
         "Привет! Я бот, который может:\n"
         "- Сохранять фото\n"
@@ -40,7 +38,6 @@ async def cmd_start(message: types.Message):
 
 @dp.message()
 async def handle_message(message: types.Message):
-    """Обработка входящих сообщений"""
     try:
         # Обработка фотографий
         if message.photo:
@@ -50,7 +47,7 @@ async def handle_message(message: types.Message):
         if message.text:
             await handle_translation(message)
 
-            # Опционально отправляем голосовое сообщение только для определенных команд
+            
             if message.text.lower() in ['/voice', 'голос', 'voice']:
                 await send_voice_message(message)
 
@@ -82,12 +79,10 @@ async def handle_photo(message: types.Message):
 async def handle_translation(message: types.Message):
     """Перевод текста на английский"""
     try:
-        # Проверяем, является ли сообщение командой
         if message.text.startswith('/'):
-            # Если это команда, не переводим текст
             return
 
-        # Переводим текст на английский, если это не команда
+        # Переводим текст на английский
         translated = GoogleTranslator(source='auto', target='en').translate(message.text)
         await message.reply(f"Перевод на английский: {translated}")
 
